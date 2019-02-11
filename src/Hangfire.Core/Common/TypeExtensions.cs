@@ -42,13 +42,14 @@ namespace Hangfire.Common
         public static MethodInfo GetNonOpenMatchingMethod(
             [NotNull] this Type type,
             [NotNull] string name,
-            [CanBeNull] Type[] parameterTypes)
+            [CanBeNull] Type[] parameterTypes, 
+            [CanBeNull] Type[] methodGenericTypes)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (name == null) throw new ArgumentNullException(nameof(name));
 
             parameterTypes = parameterTypes ?? new Type[0];
-
+            methodGenericTypes = (methodGenericTypes ?? new Type[0]);
             var methodCandidates = new List<MethodInfo>(type.GetRuntimeMethods());
 
             if (type.GetTypeInfo().IsInterface)
@@ -75,7 +76,15 @@ namespace Hangfire.Common
                 var genericArguments = methodCandidate.ContainsGenericParameters
                     ? new Type[methodCandidate.GetGenericArguments().Length]
                     : null;
-                
+
+                if (genericArguments != null && methodGenericTypes != null)
+                {
+                    for (int i = 0; i < genericArguments.Length && i < methodGenericTypes.Length; i++)
+                    {
+                        genericArguments[i] = methodGenericTypes[i];
+                    }
+                }
+
                 // Determining whether we can use this method candidate with
                 // current parameter types.
                 for (var i = 0; i < parameters.Length; i++)

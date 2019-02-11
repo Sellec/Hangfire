@@ -21,7 +21,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-#if NETFULL
+#if NET1FULL
 using System.Configuration;
 using System.Transactions;
 using IsolationLevel = System.Transactions.IsolationLevel;
@@ -238,7 +238,7 @@ namespace Hangfire.SqlServer
             [InstantHandle] Func<DbConnection, DbTransaction, T> func, 
             IsolationLevel? isolationLevel)
         {
-#if NETFULL
+#if NET1FULL
             using (var transaction = CreateTransaction(isolationLevel ?? _options.TransactionIsolationLevel))
             {
                 var result = UseConnection(dedicatedConnection, connection =>
@@ -312,7 +312,7 @@ namespace Hangfire.SqlServer
 
         private string GetConnectionString(string nameOrConnectionString)
         {
-#if NETFULL
+#if NET1FULL
             if (IsConnectionString(nameOrConnectionString))
             {
                 return nameOrConnectionString;
@@ -330,7 +330,7 @@ namespace Hangfire.SqlServer
 #endif
         }
 
-#if NETFULL
+#if NET1FULL
         private bool IsConnectionString(string nameOrConnectionString)
         {
             return nameOrConnectionString.Contains(";");

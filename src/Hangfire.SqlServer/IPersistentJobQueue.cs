@@ -23,7 +23,7 @@ namespace Hangfire.SqlServer
     {
         IFetchedJob Dequeue(string[] queues, CancellationToken cancellationToken);
 
-#if NETFULL
+#if NET1FULL
         void Enqueue(System.Data.IDbConnection connection, string queue, string jobId);
 #else
         void Enqueue(

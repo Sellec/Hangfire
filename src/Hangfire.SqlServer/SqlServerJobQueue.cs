@@ -62,7 +62,7 @@ namespace Hangfire.SqlServer
             return DequeueUsingTransaction(queues, cancellationToken);
         }
 
-#if NETFULL
+#if NET1FULL
         public void Enqueue(IDbConnection connection, string queue, string jobId)
 #else
         public void Enqueue(DbConnection connection, DbTransaction transaction, string queue, string jobId)
@@ -74,7 +74,7 @@ $@"insert into [{_storage.SchemaName}].JobQueue (JobId, Queue) values (@jobId, @
             connection.Execute(
                 enqueueJobSql, 
                 new { jobId = long.Parse(jobId), queue = queue }
-#if !NETFULL
+#if !NET1FULL
                 , transaction
 #endif
                 , commandTimeout: _storage.CommandTimeout);

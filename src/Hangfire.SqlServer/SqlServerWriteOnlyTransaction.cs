@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-#if NETFULL
+#if NET1FULL
 using System.Transactions;
 #endif
 using Dapper;
@@ -148,7 +148,7 @@ values (@jobId, @name, @reason, @createdAt, @data)";
 
             _queueCommandQueue.Enqueue((connection, transaction) => persistentQueue.Enqueue(
                 connection,
-#if !NETFULL
+#if !NET1FULL
                 transaction,
 #endif
                 queue,

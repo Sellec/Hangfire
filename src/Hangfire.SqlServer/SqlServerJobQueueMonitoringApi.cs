@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-#if NETFULL
+#if NET1FULL
 using System.Transactions;
 #else
 using System.Data;
